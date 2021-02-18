@@ -21,7 +21,7 @@ LC Select has been created focusing on these aspects: a pure javascript (ES6) pl
 - multilanguage ready
 
 
-Tested on all mordern browsers *(don't ask for old IE support please)*
+Tested on all mordern browsers *(don't ask for old IE support please)*<br/>
 For live demos check: https://lcweb.it/lc-select-javascript-plugin
 
 
