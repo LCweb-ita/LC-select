@@ -32,7 +32,7 @@ For live demos check: https://lcweb.it/lc-select-javascript-plugin
 
 1. include lc_select.min.js
 
-2. include a theme (eg. themes/light.css) 
+2. include a theme (*eg. themes/light.css*) 
 
 3. initialize plugin targeting one/multiple select fields<br/>**NB:** first parameter may be a textual selector or a DOM object (yes, also jQuery objects)
 
@@ -62,19 +62,23 @@ new lc_select('select', {
     // (int) minimum options number to show search
     min_for_search : 7,   
     
-    // (string) defines the wrapper width: "auto" to leave it up to CSS, "inherit" to statically copy input field width, or any other CSS sizing 
+    // (string) defines the wrapper width: "auto" to leave it up to CSS, "inherit" 
+    // to statically copy input field width, or any other CSS sizing 
     wrap_width : 'auto',
     
-    // (array) custom classes assigned to the field wrapper (.lcslt-wrap) and dropdown (#lc-select-dd)
+    // (array) custom classes assigned to the field wrapper (.lcslt-wrap) and 
+    // dropdown (#lc-select-dd)
     addit_classes : [], 
     
-    // (bool) if true, on simple dropdowns without a selected value, prepend an empty option using placeholder text
+    // (bool) if true, on simple dropdowns without a selected value, prepend 
+    // an empty option using placeholder text
     pre_placeh_opt : false, 
     
     // (int|false) defining maximum selectable options for multi-select
     max_opts : false, 
     
-    // (function) triggered every time field value changes. Passes value and target field object as parameters
+    // (function) triggered every time field value changes. Passes value and 
+    // target field object as parameters
     on_change : null, // function(new_value, target_field) {},
 
     // (array) option used to translate script texts
@@ -139,9 +143,9 @@ document.querySelectorAll('select').forEach(function(el) {
 
 There are two extra events you can trigger on initialized elements:
 
-- lc-select-refresh: re-sync select field options and status with plugin instance (eg. when new fields are dynamically added)
+- **lc-select-refresh:** re-sync select field options and status with plugin instance (eg. when new fields are dynamically added)
 
-- lc-select-destroy: remove plugn instance, coming back to HTML select field
+- **lc-select-destroy:** remove plugn instance, coming back to HTML select field
 
 
 ```
