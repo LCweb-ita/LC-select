@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">  
+    <title>LC Select - by LCweb</title>
+    
+    <!-- PAGE BASE CSS -->
+    <style type="text/css"> a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,caption,center,cite,code,dd,del,details,dfn,div,dl,dt,em,embed,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,html,i,iframe,img,ins,kbd,label,legend,li,mark,menu,nav,object,ol,output,p,pre,q,ruby,s,samp,section,small,span,strike,strong,sub,summary,sup,table,tbody,td,tfoot,th,thead,time,tr,tt,u,ul,var,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:after,blockquote:before,q:after,q:before{content:'';content:none}table{border-collapse:collapse;border-spacing:0}
+        
+    *{box-sizing:border-box;line-height:normal}body{background:#fcfcfc;font-family:sans-serif;color:#303030}.container:after{content:"";display:block;clear:both}.header{text-align:center;padding:40px 20px 20px;background:#343434;border-bottom:4px solid #7dc242;position:relative;z-index:2;overflow:hidden;color:#fefefe;}#logo{border:0;background:#343434;padding:0;position:relative;bottom:-5px;width:29px;margin-right:5px}.header svg{filter:blur(1px);opacity:.015;position:absolute;top:0;left:0;right:0;bottom:0;transform:rotate(3deg) scale(1.35);z-index:-1}.left-shade{fill:#afafaf}.right-shade{fill:#bfbfbf}.header h2{font-size:34px;margin-top:-12px;}.header h4{font-size:18px;font-weight:400;line-height:135%;margin:15px 0;color:#f0f0f0;}.header h4 a{color:#cfcfcf;}.content{max-width:1200px; margin:auto;}
+    </style>
+    
+    
+
+    <style>
+	.content form {
+        border: 12px solid #f8f8f8;
+        background: #f4f4f4;
+        padding: 45px;
+        margin: 70px auto 40px;
+        border-radius: 5px;
+        max-width: 900px;
+        box-shadow: 0 1px 7px rgba(0,0,0,0.2);
+    }
+    .content label {
+        display: block;
+        font-weight: bold;
+        letter-spacing: 0.02em; 
+        color: #666;
+        text-shadow: 0 0 0 #666;
+        padding: 5px 0 8px;
+    }
+    .content label:not(:first-of-type) {
+        margin-top: 30px;
+    }
+    .content select {   
+        width: 100%;
+        max-width: 300px;
+    }
+    </style>
+    
+    
+    
+    
+    <!-- PLUGIN'S THEME -->
+    <link href="themes/light.css" rel='stylesheet' type='text/css'>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h2>
+                <img id="logo" src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACEAAAAlCAMAAAD7q3BLAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAAxQTFRFS1NFfsJCx8jKNDQ0SyWmjgAAAAR0Uk5T////AEAqqfQAAACySURBVHja7JTLFsQgCEOD/P8/jw9EgjiLWU88XQi3sSoUSgJaQwrRRNqQ4EWgbQEVcfKTuQgwEGxQGZANXnlnUCzAS0Hf+WXTB3lA1vDAPBxHEMWbWnM+bnFXse1g2ZnOBjshlhuPbPVZIIzRk7+JGYnAr4R8J/RPXGcaxXd77i71JxHi7+pVY0KMEVTudKXji69aj5WVidUvSgwRiH1bEMi9n4jc+26zCdT/ICdi9CPAAHRlCGHRLtsqAAAAAElFTkSuQmCC" />
+                LC Select
+            </h2>
+            <h4>Superlight vanilla javascript dropdowns, by <a href="https://lcweb.it" target="_blank">LCweb</a></h4>
+            
+            <svg width="100%" height="100%">
+                <pattern id="pattern-cubes" x="0" patternUnits="userSpaceOnUse" viewBox="0 0 10 16" height="100" width="116" y="68">
+                    <g id="cube">
+                        <path class="left-shade" d="M0 0l5 3v5l-5 -3z" />
+                        <path class="right-shade" d="M10 0l-5 3v5l5 -3" />
+                    </g>
+                    <use x="5" y="8" xlink:href="#cube" />
+                    <use x="-5" y="8" xlink:href="#cube" />
+                </pattern>
+                <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-cubes)" />
+            </svg>
+        </div>
+        
+        <div class="content">
+              
+        
+            <!-- //////////////////////////////////////////////// -->
+            <!-- REQUIRED HTML -->
+        
+            <form>
+                <label>Simple (with images, search and prepended placeholder option)</label>
+                <select name="simple" data-placeholder="Selec something please ..">
+                    <optgroup label="Europe" data-image="https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Europe.svg">
+                        <option value="ita" data-image="https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg">Italy</option>
+                        <option value="fra" data-image="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/900px-Flag_of_France.svg.png" disabled>France</option>
+                        <option value="esp" data-image="https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/1200px-Flag_of_Spain.svg.png">Spain</option>
+                    </optgroup>
+                    <optgroup label="Asia">
+                        <option value="jap">Japan</option>
+                        <option value="kor">Korea</option>
+                        <option value="chn" disabled>China</option>
+                    </optgroup>
+                </select>
+
+                 
+                <label>Multiple (max 2 selectable options)</label>
+                <select name="multiple" data-placeholder="What a nice placeholder" multiple>
+                    <option value="lorem">Lorem</option>
+                    <option value="ipsum" selected>Ipsum</option>
+                    <option value="dolor">Dolor</option>
+                </select>
+            </form>
+        
+            <!-- //////////////////////////////////////////////// -->
+        
+        
+        </div>
+    </div>
+    
+    
+    
+    
+    <!-- //////////////////////////////////////////////// -->
+    <!-- REQUIRED JAVASCRIPT -->
+    
+    <script src="lc_select.js"></script>
+    
+    <script>
+    const select = document.querySelector('select[name=simple]');
+    new lc_select(select, {
+        wrap_width: '100%',
+        min_for_search: 3,
+        pre_placeh_opt: true,
+    });
+
+    new lc_select('select[name="multiple"]', {
+        wrap_width : '100%',
+        enable_search : false,
+        max_opts : 2,
+    });
+    </script>
+    <!-- //////////////////////////////////////////////// -->
+
+
+
+</body>
+</html>
