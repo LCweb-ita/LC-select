@@ -93,7 +93,7 @@ new lc_select('select', {
 
 ## Mixing themes
 
-The easiest and cleanest way to mix themes onn the same webpage is 
+The easiest and cleanest way to mix themes on the same webpage is 
 
 1. using *addit_classes* option to specify the theme prefix
 
