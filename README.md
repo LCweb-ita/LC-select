@@ -25,6 +25,8 @@ Tested on all mordern browsers *(don't ask for old IE support please)*<br/>
 For live demos check: https://lcweb.it/lc-select-javascript-plugin
 
 
+<br/>
+
 
 ## Installation & Usage
 
