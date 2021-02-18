@@ -17,8 +17,8 @@
 	.content form {
         border: 12px solid #f8f8f8;
         background: #f4f4f4;
-        padding: 45px;
-        margin: 70px auto 40px;
+        padding: 30px 45px 45px;
+        margin: 70px 25px 40px;
         border-radius: 5px;
         max-width: 900px;
         box-shadow: 0 1px 7px rgba(0,0,0,0.2);
@@ -78,11 +78,11 @@
         
             <form>
                 <label>Simple (with images, search and prepended placeholder option)</label>
-                <select name="simple" data-placeholder="Selec something please ..">
-                    <optgroup label="Europe" data-image="https://upload.wikimedia.org/wikipedia/commons/b/b7/Flag_of_Europe.svg">
-                        <option value="ita" data-image="https://upload.wikimedia.org/wikipedia/en/0/03/Flag_of_Italy.svg">Italy</option>
-                        <option value="fra" data-image="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c3/Flag_of_France.svg/900px-Flag_of_France.svg.png" disabled>France</option>
-                        <option value="esp" data-image="https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Flag_of_Spain.svg/1200px-Flag_of_Spain.svg.png">Spain</option>
+                <select name="simple" data-placeholder="Select something please ..">
+                    <optgroup label="Europe" data-image="demo-img/eu.svg">
+                        <option value="ita" data-image="demo-img/ita.svg">Italy</option>
+                        <option value="fra" data-image="demo-img/fra.png" disabled>France</option>
+                        <option value="esp" data-image="demo-img/esp.png">Spain</option>
                     </optgroup>
                     <optgroup label="Asia">
                         <option value="jap">Japan</option>
@@ -90,8 +90,7 @@
                         <option value="chn" disabled>China</option>
                     </optgroup>
                 </select>
-
-                 
+                
                 <label>Multiple (max 2 selectable options)</label>
                 <select name="multiple" data-placeholder="What a nice placeholder" multiple>
                     <option value="lorem">Lorem</option>

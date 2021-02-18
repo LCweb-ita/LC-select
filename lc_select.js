@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.0
+ * Version: 1.0.1
  * Author: Luca Montanari aka LCweb
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -121,7 +121,7 @@
                 }
                 
                 // do not initialize twice
-                if(el.parentNode.classList.length && el.parentNode.classList.contains('lcslt_wrap')) {
+                if(el.parentNode.classList.length && el.parentNode.classList.contains('lcslt-wrap')) {
                     return;    
                 }
 
@@ -129,6 +129,7 @@
                 
                 
                 // hook to update LC select implementation of select fields (eg. when new fields are dynamically added)
+                el.removeEventListener('lc-select-refresh', () => {});
                 el.addEventListener('lc-select-refresh', (e) => {
                     
                     // close eventually opened dropdowns
@@ -139,8 +140,12 @@
                     const trigger = e.target.parentNode.querySelector('.lcslt');
                     $this.set_sel_content(trigger);
                     
+                    // only on initialized elements
+                    if(!e.target.parentNode.classList.length || (e.target.parentNode.classList.length && !e.target.parentNode.classList.contains('lcslt-wrap'))) {
+                        return false;    
+                    }
+                    
                     // track disabled status
-                    console.log(e.target.disabled);
                     (e.target.disabled) ? trigger.classList.add('lcslt-disabled') : trigger.classList.remove('lcslt-disabled'); 
                     
                     return true;
@@ -148,6 +153,7 @@
                 
                 
                 // hook destroying LC select implementation of select fields
+                el.removeEventListener('lc-select-destroy', () => {});
                 el.addEventListener('lc-select-destroy', (e) => {
                     
                     // close eventually opened dropdowns
@@ -159,6 +165,11 @@
                           wrap      = e.target.parentNode,
                           fake_opt  = select.querySelector('option[data-lcslt-placeh="1"]');
 
+                    // only on initialized elements
+                    if(!wrap.classList.length || (wrap.classList.length && !wrap.classList.contains('lcslt-wrap'))) {
+                        return false;    
+                    }
+                    
                     if(fake_opt) {
                         fake_opt.remove();    
                     }
@@ -365,8 +376,7 @@
             const dd            = document.querySelector('#lc-select-dd'),
                   at_offset     = active_trigger.getBoundingClientRect(),
                   dd_w          = at_offset.width.toFixed(2),
-                  at_vert_boders= parseInt(getComputedStyle(active_trigger)['borderTopWidth'], 10) + parseInt(getComputedStyle(active_trigger)['borderBottomWidth'], 10),
-                  at_h          = parseInt(active_trigger.clientHeight, 10) + at_vert_boders,
+                  at_h          = parseInt(active_trigger.clientHeight, 10) + parseInt(getComputedStyle(active_trigger)['borderTopWidth'], 10),
                   y_pos         = parseInt(at_offset.y, 10) + parseInt(window.pageYOffset, 10) + at_h;
                     
             // left pos control - also checking side overflows
@@ -374,14 +384,8 @@
             if(left < 0) {
                 left = 0;
             }
-            
-            // top or bottom ? (actually only bottom - downsize the dd in case)  
-            /*const y_pos_css = (y_pos - document.documentElement.scrollTop < window.innerHeight) ? 
-                    'top:'+ y_pos : 
-                    'transform: translate3d(0, calc((100% + '+ (active_trigger.offsetHeight - at_vert_boders) +'px) * -1), 0); top:'+ y_pos;*/
-            const y_pos_css = 'top:'+ y_pos;
 
-            dd.setAttribute('style', 'width:'+ dd_w +'px; '+ y_pos_css +'px; left: '+ left +'px;');          
+            dd.setAttribute('style', 'width:'+ dd_w +'px; top:'+ y_pos +'px; left: '+ left +'px;');          
         };
         
         
@@ -752,6 +756,10 @@
 	height: auto;
 	line-height: 0;
 }
+.lcslt span:not(.lcslt-placeholder):not(.lcslt-multi-callout) {
+	line-height: 1.1em;
+	font-size: 0.95em;
+}
 .lcslt-opt {
     display: inline-block;
     margin: 0 0 5px 5px; 
@@ -799,6 +807,10 @@
 #lc-select-dd.lcslt-shown {
     visibility: visible;
     z-index: 99999999;
+}
+#lc-select-dd ul {
+	margin: 0;
+	list-style: none;
 }
 .lc-select-dd-scroll {
     max-height: 200px; 
@@ -852,11 +864,9 @@
 #lc-select-dd li span {
     word-break: break-all;
 }
-#lc-select-dd li span,
-#lc-select-dd li img {
+#lc-select-dd li span {
     display: inline-block;
     line-height: normal;
-    vertical-align: bottom;
 }
 .lcslt-dd_opt:not(.lcslt-disabled):not(.lcslt-selected),
 .lcslt-multiple-dd .lcslt-dd_opt:not(.lcslt-disabled) {   
@@ -867,7 +877,7 @@
     background-repeat: no-repeat;
     background-size: contain;
     background-color: transparent;
-    vertical-align: bottom;
+    vertical-align: top;
     line-height: 0;
     font-size: 0;
 }

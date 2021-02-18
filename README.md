@@ -47,6 +47,28 @@ new lc_select('select');
 <br/>
 
 
+## Specific HTML attributes
+
+There are two optional attributes you can use to take advantage of plugin functionalities:
+
+- **data-placeholder:** to be used on the *select* HTML tag, sets field placeholder in case of no option selected<br/>(check also *pre_placeh_opt* option for simple selects)
+
+- **data-image:** to be used on *optgroup* or *option* HTML tags, sets option's image
+
+```
+<select name="simple" data-placeholder="Select something please ..">
+    <optgroup label="Europe" data-image="demo-img/eu.svg">
+        <option value="ita" data-image="demo-img/ita.svg">Italy</option>
+        <option value="fra" data-image="demo-img/fra.png">France</option>
+        <option value="esp" data-image="demo-img/esp.png">Spain</option>
+    </optgroup>
+</select>
+```
+
+
+<br/>
+
+
 ## Options
 
 Here are listed available options with default values
@@ -124,7 +146,7 @@ new lc_select('.select-class-dark', {
 
 ## Public Events
 
-Alternatively to the "on_change" option, you can use the native "change" element event to track field changes, 
+Alternatively to the "on_change" option, you can use the native "change" element event to track field changes
 
 
 ```
