@@ -1,0 +1,55 @@
+{
+    "author": "LCweb",
+    "name": "lc-select",
+    "version": "1.0",
+    "description": "Superlight vanilla javascript plugin, for modern web dropdowns. Supporting multi-options, search and images. Designed to be seamlessly themed",
+    "keywords": [
+        "javascript",
+        "select",
+        "dropdown",
+        "select",
+        "vanilla-javascript",
+        "pure-javascript",
+        "es6-javascript",
+        "multilanguage-support",
+        "multiple-dropdown"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/LCweb-ita/LC-select.git"
+    },
+    "files": [
+        "lc_select.min.js",
+        "themes"
+    ],
+    "dependencies": {},
+    "devDependencies": {},
+    "contributors": [
+        {
+            "name": "LCweb-ita",
+            "url": "https://github.com/LCweb-ita"
+        }
+    ],
+    "license": "MIT",
+    "homepage": "https://lcweb.it/lc-select-javascript-plugin",
+    "bugs": "https://github.com/LCweb-ita/LC-select/issues",
+    "_extra": {
+        "title": "LC Select",
+        "license": {
+            "type": "MIT",
+            "url": "https://github.com/LCweb-ita/LC-select/blob/main/LICENSE"
+        },
+        "links": {
+            "download": "https://github.com/LCweb-ita/LC-select/releases",
+            "docs": "https://github.com/LCweb-ita/LC-select"
+        },
+        "main": [
+            "lc_select.min.js",
+            "themes"
+        ],
+        "files": [
+            "lc_select.min.js",
+            "themes"
+        ]
+    }
+}

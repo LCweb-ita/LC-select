@@ -128,7 +128,7 @@
                 $this.wrap_element(el);
                 
                 
-                // hook to update LC select implementation of select fields (eg. when new fields are )
+                // hook to update LC select implementation of select fields (eg. when new fields are dynamically added)
                 el.addEventListener('lc-select-refresh', (e) => {
                     
                     // close eventually opened dropdowns
