@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Luca Montanari aka LCweb
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -91,7 +91,7 @@
     
     
     /* navigate through dd opts with keys (38 up, 40 down, 13 enter, 27 exit, 9 tab)*/
-    document.addEventListener("keyup", (e) => {
+    document.addEventListener("keydown", (e) => {
         if([38, 40, 13, 27, 9].indexOf(e.keyCode) === -1 || !document.querySelector("#lc-select-dd.lcslt-shown")) {
             return true;    
         }
@@ -139,11 +139,25 @@
                 }
                 
                 opts[new_sel].dispatchEvent(event);
+                set_hlight_opt_scroll();
                 break;
         }
         
         return true;
     });
+    
+    
+    
+    /* set dropdown scroll position for highlighted option */
+    const set_hlight_opt_scroll = () => {
+        const hlight = document.querySelector('.lcslt-dd-opt-hlight');
+        if(!hlight) {
+            return false;    
+        }
+        
+        const top_border = parseInt(getComputedStyle(hlight)['borderTopWidth'], 10);
+        document.querySelector(".lc-select-dd-scroll").scrollTop = hlight.offsetTop - ((hlight.offsetHeight + top_border) * 2) - 10; 
+    };
     
 
     
@@ -419,6 +433,7 @@
             
             this.append_dd();
             this.set_dd_position();
+            set_hlight_opt_scroll();
             
             const $this = this,
                   dd = document.querySelector('#lc-select-dd');
@@ -457,8 +472,9 @@
         
         /* append and populates dropdown with select options */
         this.append_dd = function() {
-            const $this     = this,
-                  select    = active_trigger.parentNode.querySelector('select');
+            const $this         = this,
+                  select        = active_trigger.parentNode.querySelector('select'),
+                  highligh_set  = false;
             
             // var containing groups with options
             let structure = [
@@ -551,10 +567,11 @@
                 
                 // group options
                 Object.keys( structure[group] ).some((opt) => { 
-                    const vals      = structure[group][opt],
-                          img       = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
-                          sel_class = (vals.selected) ? 'lcslt-selected': '',
-                          dis_class = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
+                    const vals          = structure[group][opt],
+                          img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
+                          sel_class     = (vals.selected) ? 'lcslt-selected' : '',
+                          dis_class     = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '',
+                          hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
                           
                     // hide simple dropdown placeholder opt
                     if(!multiple_class && select.querySelector('option[value="'+ opt +'"]').hasAttribute('data-lcslt-placeh')) {
@@ -562,7 +579,7 @@
                     }
 
                     code += 
-                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +'" data-val="'+ opt +'">'+ 
+                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt +'">'+ 
                             '<span>'+ img + vals.name +'</span>'+
                         '</li>';
                 });
