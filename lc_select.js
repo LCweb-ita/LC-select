@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1
+ * Version: 1.1.1
  * Author: Luca Montanari aka LCweb
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -253,7 +253,7 @@
             
             // be sure there's a placeholder for multiple
             let placeh = (el.hasAttribute('data-placeholder')) ? el.getAttribute('data-placeholder').trim() : ''; 
-            if(!placeh && multi_class) {
+            if(placeh && (multi_class || options.pre_placeh_opt)) {
                 placeh = options.labels[2];    
             }
             
@@ -271,8 +271,8 @@
             
             
             div.classList.add("lcslt-wrap", fname_class);
-            div.innerHTML = '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>'+
-                            '<input type="text" name="'+ fname_class +'-tit" tabindex="'+ tabindex +'" class="lcslt-tabindex-trick" />';
+            div.innerHTML = '<input type="text" name="'+ fname_class +'-tit" tabindex="'+ tabindex +'" class="lcslt-tabindex-trick" />' +
+                            '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>';
 
             el.parentNode.insertBefore(div, el);
             div.appendChild(el);
@@ -342,7 +342,7 @@
                 tot_opts    = 0,
                 sel_opts    = 0;
             
-            trigger.nextSibling.querySelectorAll('option').forEach(opt => {
+            select.querySelectorAll('option').forEach(opt => {
                 
                 if(opt.selected) {
                     const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : ''; 
