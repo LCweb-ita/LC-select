@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.0.1
+ * Version: 1.1
  * Author: Luca Montanari aka LCweb
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -24,6 +24,7 @@
     const def_opts = {
         enable_search   : true, // (bool) whether to enable fields search
         min_for_search  : 7, // (int) minimum options number to show search  
+        autofocus_search: false, // (bool) whether to automatically focus search field on desktop (NB: will break tabindex chain)
         wrap_width      : 'auto', // (string) defines the wrapper width: "auto" to leave it up to CSS, "inherit" to statically copy input field width, or any other CSS sizing 
         addit_classes   : [], // (array) custom classes assigned to the field wrapper (.lcslt-wrap) and dropdown (#lc-select-dd)
         pre_placeh_opt  : false, // (bool) if true, on simple dropdowns without a selected value, prepend an empty option using placeholder text
@@ -87,6 +88,63 @@
         return true;
     });
     
+    
+    
+    /* navigate through dd opts with keys (38 up, 40 down, 13 enter, 27 exit, 9 tab)*/
+    document.addEventListener("keyup", (e) => {
+        if([38, 40, 13, 27, 9].indexOf(e.keyCode) === -1 || !document.querySelector("#lc-select-dd.lcslt-shown")) {
+            return true;    
+        }
+        
+        e.preventDefault();
+        const highlighted   = document.querySelector(".lcslt-dd-opt.lcslt-dd-opt-hlight"),
+              opts          = document.querySelectorAll(".lcslt-dd-opt:not(.lcslt-disabled)"),
+              event         = new Event('mouseenter');
+
+        switch(e.keyCode) {
+            case 27 : // close
+                active_trigger.click();
+                break;
+                
+            case 9 : // tab
+                if(!document.activeElement.classList || !document.activeElement.classList.contains('lcslt-tabindex-trick')) {
+                    active_trigger.click();    
+                }
+                break;
+            
+            case 13 : // select
+                if(highlighted) {
+                    highlighted.classList.remove('lcslt-dd-opt-hlight');
+                    highlighted.click();
+                }
+                break;
+            
+            case 38 : // up
+            case 40 : // down
+                let sel_index = (e.keyCode == 38) ? 0 : opts.length - 1; // by default set to first or last element
+
+                if(highlighted) {
+                    opts.forEach((opt, i) => {
+                        if(opt == highlighted) {
+                            sel_index = i;    
+                        }
+                    });  
+                }
+                
+                let new_sel;
+                if(e.keyCode == 38) {
+                    new_sel = (!sel_index) ? opts.length - 1 : sel_index - 1;    
+                } else {
+                    new_sel = (sel_index == (opts.length - 1)) ? 0 : sel_index + 1;
+                }
+                
+                opts[new_sel].dispatchEvent(event);
+                break;
+        }
+        
+        return true;
+    });
+    
 
     
     
@@ -126,7 +184,7 @@
                 }
 
                 $this.wrap_element(el);
-                
+
                 
                 // hook to update LC select implementation of select fields (eg. when new fields are dynamically added)
                 el.removeEventListener('lc-select-refresh', () => {});
@@ -190,7 +248,8 @@
                   div           = document.createElement('div'),
                   fname_class   = 'lcslt-f-'+ el.getAttribute('name').replace(/\[\]/g, ''),
                   disabled_class= (el.disabled) ? 'lcslt-disabled' : '',
-                  multi_class   = (el.multiple) ? 'lcslt-multiple' : '';
+                  multi_class   = (el.multiple) ? 'lcslt-multiple' : '',
+                  tabindex      = (el.getAttribute('tabindex')) ? parseInt(el.getAttribute('tabindex'), 10) : '';
             
             // be sure there's a placeholder for multiple
             let placeh = (el.hasAttribute('data-placeholder')) ? el.getAttribute('data-placeholder').trim() : ''; 
@@ -211,8 +270,9 @@
             }
             
             
-            div.classList.add("lcslt-wrap");
-            div.innerHTML = '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>';
+            div.classList.add("lcslt-wrap", fname_class);
+            div.innerHTML = '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>'+
+                            '<input type="text" name="'+ fname_class +'-tit" tabindex="'+ tabindex +'" class="lcslt-tabindex-trick" />';
 
             el.parentNode.insertBefore(div, el);
             div.appendChild(el);
@@ -259,6 +319,11 @@
                     $this.show_dd(trigger)
                 }
             }); 
+            
+            // tabindex focus trick
+            div.querySelector('.lcslt-tabindex-trick').onfocus = (e) => {
+                trigger.click();
+            };
         };
         
         
@@ -495,9 +560,9 @@
                     if(!multiple_class && select.querySelector('option[value="'+ opt +'"]').hasAttribute('data-lcslt-placeh')) {
                         return;        
                     }
-                    
+
                     code += 
-                        '<li class="lcslt-dd_opt '+ sel_class +' '+ dis_class +'" data-val="'+ opt +'">'+ 
+                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +'" data-val="'+ opt +'">'+ 
                             '<span>'+ img + vals.name +'</span>'+
                         '</li>';
                 });
@@ -510,17 +575,34 @@
             document.body.insertAdjacentHTML('beforeend', code +'</ul></div>');
             
             
-            // option selection listener
-            document.querySelectorAll('.lcslt-dd_opt').forEach(opt => {
-                opt.addEventListener("click", (e) => {$this.clicked_dd_option(e, opt)});        
+            document.querySelectorAll('.lcslt-dd-opt').forEach(opt => {
+                
+                // option selection listener
+                opt.addEventListener("click", (e) => {
+                    $this.clicked_dd_option(e, opt);
+                });   
+                
+                // option highlighter listener
+                opt.addEventListener("mouseenter", (e) => {
+                    if(document.querySelector('.lcslt-dd-opt-hlight')) {
+                        document.querySelector('.lcslt-dd-opt-hlight').classList.remove('lcslt-dd-opt-hlight');        
+                    }
+                    if(!opt.classList.contains('lcslt-disabled')) {
+                        opt.classList.add('lcslt-dd-opt-hlight');
+                    }
+                });
+                opt.addEventListener("mouseleave", (e) => {
+                    opt.classList.remove('lcslt-dd-opt-hlight');
+                }); 
             });
+
 
             
             // search listener
             if(has_searchbar) {
                 
                 // focus search field on open - on desktop 
-                if(window.innerWidth > 1024) {
+                if(window.innerWidth > 1024 && options.autofocus_search) {
                     setTimeout(() => document.querySelector('input[name=lcslt-search]').focus(), 50);
                 }
                 
@@ -580,7 +662,7 @@
 
             // if not multiple - unselect other options
             if(!is_multiple) {
-                document.querySelectorAll('.lcslt-dd_opt').forEach(dd_opt => {
+                document.querySelectorAll('.lcslt-dd-opt').forEach(dd_opt => {
                     if( dd_opt.getAttribute('data-val') != opt_val ) {
                         dd_opt.classList.remove('lcslt-selected');    
                     }
@@ -594,6 +676,8 @@
             
             // toggle selection
             opt.classList.toggle('lcslt-selected');
+            opt.classList.remove('lcslt-dd-opt-hlight');
+            
             select.querySelector('option[value="'+ opt_val +'"]').selected = !select.querySelector('option[value="'+ opt_val +'"]').selected;
             
             // sync with trigger
@@ -615,9 +699,13 @@
         
         // options search
         this.search_options = function() {
+            if(!document.querySelector('input[name=lcslt-search]')) {
+                return false;    
+            }
+            
             const val           = document.querySelector('input[name=lcslt-search]').value.trim(),
                   groups        = document.querySelectorAll('.lcslt-group-name'),
-                  opts          = document.querySelectorAll('.lcslt-dd_opt'),
+                  opts          = document.querySelectorAll('.lcslt-dd-opt'),
                   no_results_li = document.querySelector('.lcslt-no-results');
             
             if(val.length < 2) {
@@ -785,6 +873,10 @@
 	line-height: normal;
 	padding-bottom: 5px;
 }
+.lcslt-tabindex-trick {
+    position: fixed;
+    top: -99999px;
+}
 
 
 .lcslt-wrap,
@@ -856,6 +948,7 @@
 }
 #lc-select-dd li {
     width: 100%;
+    margin: 0;
 }
 #lc-select-dd li > div {
     display: flex;
@@ -868,8 +961,8 @@
     display: inline-block;
     line-height: normal;
 }
-.lcslt-dd_opt:not(.lcslt-disabled):not(.lcslt-selected),
-.lcslt-multiple-dd .lcslt-dd_opt:not(.lcslt-disabled) {   
+.lcslt-dd-opt:not(.lcslt-disabled):not(.lcslt-selected),
+.lcslt-multiple-dd .lcslt-dd-opt:not(.lcslt-disabled) {   
     cursor: pointer;
 }
 .lcslt-img {
@@ -905,6 +998,12 @@
         if(typeof(selector) != 'string') {
             return (selector instanceof Element) ? [selector] : Object.values(selector);   
         }
+        
+        // clean problematic selectors
+        (selector.match(/(#[0-9][^\s:,]*)/g) || []).forEach(function(n) {
+            selector = selector.replace(n, '[id="' + n.replace("#", "") + '"]');
+        });
+        
         return document.querySelectorAll(selector);
     };
     

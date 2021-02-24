@@ -143,21 +143,26 @@
 .lcslt-light .lcslt-group-opts > li {
     padding-left: 12px;
 }
-.lcslt-light .lcslt-dd_opt {   
+.lcslt-light .lcslt-dd-opt {   
     transition: all .15s ease;
     color: #6f6f6f;
 }
-.lcslt-light#lc-select-dd li.lcslt-dd_opt:not(.lcslt-disabled):not(.lcslt-selected):hover {  
-    color: #444;
-    background: #f1f1f1;
+.lcslt-light#lc-select-dd li.lcslt-dd-opt:not(.lcslt-disabled):not(.lcslt-selected):hover,
+.lcslt-light#lc-select-dd .lcslt-dd-opt-hlight {  
+    color: #333;
+    background: #d7eeff;
 }
-.lcslt-light#lc-select-dd li.lcslt-dd_opt.lcslt-disabled {   
-    background: #efefef;
+.lcslt-light#lc-select-dd li.lcslt-dd-opt.lcslt-disabled {   
+    background: #ededed;
     color: #777;
 }
 .lcslt-light#lc-select-dd li.lcslt-selected {   
     color: #fff;
     background: #0078d7;
+    text-shadow: 0 0 2px rgba(0,0,0,0.15);
+}
+.lcslt-light#lc-select-dd li.lcslt-selected.lcslt-dd-opt-hlight {
+	box-shadow: 6px 0 0 #89caff inset;
 }
 .lcslt-light .lcslt-is-searching li.lcslt-group,
 .lcslt-light .lcslt-no-results {

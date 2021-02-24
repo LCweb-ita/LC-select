@@ -1,14 +1,14 @@
 # Superlight vanilla javascript dropdowns by LCweb
 
 Need to **jump off of jQuery (or any other) dependency?** Other packages are too heavy to just tweak select fields?<br/>
-LC Select has been created focusing on these aspects: a pure javascript (ES6) plugin offering many features in **just 18KB (+ a 4KB theme)**. 
+LC Select has been created focusing on these aspects: a pure javascript (ES6) plugin offering many features in **just 20KB (+ a 4KB theme)**. 
 
 
 ![](plugin_preview.gif)
 
 ### Top features list:
 
-- sigle 18KB file, no dependencies, 100% pure javascript
+- sigle 20KB file, no dependencies, 100% pure javascript
 - two themes (light, dark) included. Designed to be themed with no efforts
 - themes mix support using prefixed selectors 
 - supports both simple and multiple select fields
@@ -16,6 +16,7 @@ LC Select has been created focusing on these aspects: a pure javascript (ES6) pl
 - (optional) default placeholder for simple select fields
 - (optional) searchbar with minimum fields threshold
 - (optional) maximum selectable options
+- complete keyboard events integration
 - option images support
 - mobile ready
 - multilanguage ready
@@ -83,6 +84,9 @@ new lc_select('select', {
     
     // (int) minimum options number to show search
     min_for_search : 7,   
+    
+    // (bool) whether to automatically focus search field on desktop (NB: will break tabindex chain)
+    autofocus_search: false,
     
     // (string) defines the wrapper width: "auto" to leave it up to CSS, "inherit" 
     // to statically copy input field width, or any other CSS sizing 

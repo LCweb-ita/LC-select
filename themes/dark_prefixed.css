@@ -143,21 +143,27 @@
 .lcslt-dark .lcslt-group-opts > li {
     padding-left: 12px;
 }
-.lcslt-dark .lcslt-dd_opt {   
+.lcslt-dark .lcslt-dd-opt {   
     transition: all .15s ease;
     color: #6f6f6f;
 }
-.lcslt-dark#lc-select-dd li.lcslt-dd_opt:not(.lcslt-disabled):not(.lcslt-selected):hover {  
-    color: #ddd;
-    background: #202020;
+.lcslt-dark#lc-select-dd li.lcslt-dd-opt:not(.lcslt-disabled):not(.lcslt-selected):hover,
+.lcslt-dark#lc-select-dd .lcslt-dd-opt-hlight {  
+    color: #fff;
+    background: #809bb1;
+    text-shadow: 0 0 2px rgba(0,0,0,0.3);
 }
-.lcslt-dark#lc-select-dd li.lcslt-dd_opt.lcslt-disabled {   
+.lcslt-dark#lc-select-dd li.lcslt-dd-opt.lcslt-disabled {   
     background: #404040;
     color: #7f7f7f;
 }
 .lcslt-dark#lc-select-dd li.lcslt-selected {   
     color: #fff;
     background: #0078d7;
+    text-shadow: 0 0 2px rgba(0,0,0,0.15);
+}
+.lcslt-dark#lc-select-dd li.lcslt-selected.lcslt-dd-opt-hlight {
+	box-shadow: 6px 0 0 #89caff inset;
 }
 .lcslt-dark .lcslt-is-searching li.lcslt-group,
 .lcslt-dark .lcslt-no-results {
