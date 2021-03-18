@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Luca Montanari aka LCweb
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -99,7 +99,7 @@
         e.preventDefault();
         const highlighted   = document.querySelector(".lcslt-dd-opt.lcslt-dd-opt-hlight"),
               opts          = document.querySelectorAll(".lcslt-dd-opt:not(.lcslt-disabled)"),
-              event         = new Event('mouseenter');
+              event         = new Event('mouseenter', {bubbles:true});
 
         switch(e.keyCode) {
             case 27 : // close
@@ -267,7 +267,7 @@
             
             // be sure there's a placeholder for multiple
             let placeh = (el.hasAttribute('data-placeholder')) ? el.getAttribute('data-placeholder').trim() : ''; 
-            if(placeh && (multi_class || options.pre_placeh_opt)) {
+            if(!placeh && multi_class) {
                 placeh = options.labels[2];    
             }
             
@@ -637,7 +637,7 @@
                   values = Array.from( select.selectedOptions ).map(el=>el.value); 
             
             // trigger native "change" event
-            const event = new Event('change');
+            const event = new Event('change', {bubbles:true});
             select.dispatchEvent(event);
             
             // callback?
