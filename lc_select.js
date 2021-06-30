@@ -1,7 +1,7 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.3
- * Author: Luca Montanari aka LCweb
+ * Version: 1.1.4
+ * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
  */
@@ -14,7 +14,8 @@
     
     /*** vars ***/
     let debounced_vars  = [],
-
+        noscroll_window = false,
+        
         style_generated = null,
         active_trigger  = null;
     
@@ -86,6 +87,15 @@
         active_trigger = null;
         
         return true;
+    });
+    
+    
+
+    // disable page scroll on element scroll
+    window.addEventListener('scroll', (e) => {
+        if(document.querySelector('.lc-select-dd-scroll') && noscroll_window) {
+            window.scrollTo(noscroll_window[0], noscroll_window[1]);
+        }
     });
     
     
@@ -170,7 +180,7 @@
         }
     
         // override options
-        if(typeof(options) !=  'object') {
+        if(typeof(options) != 'object') {
             return console.error('Options must be an object');    
         }
         options = Object.assign({}, def_opts, options);
@@ -477,9 +487,9 @@
                   highligh_set  = false;
             
             // var containing groups with options
-            let structure = [
+            let structure = new Map(),
                 /*
-                group_name : {
+                group_name : [map] {
                     opt_val : {
                         img     : (string) ,
                         name    : (string),
@@ -488,18 +498,17 @@
                     }
                 }
                 */
-            ],
             no_groups       = false,
             disabled_groups = []; 
             
             // retrieve groups
             if(!select.querySelectorAll('optgroup').length) {
                 no_groups = true;
-                structure['%%lcslt%%'] = {};
+                structure.set('%%lcslt%%', new Map());
             }
             else {
                 select.querySelectorAll('optgroup').forEach(group => {
-                    structure[ group.getAttribute('label') ] = {};  
+                    structure.set(group.getAttribute('label'), new Map());
                     
                     if(group.disabled) {
                         disabled_groups.push( group.getAttribute('label') );    
@@ -523,7 +532,8 @@
                 if(!no_groups && !group) {
                     return;    
                 }
-                structure[ group ][ opt.getAttribute('value') ] = obj;
+                
+                structure.get( group ).set( opt.getAttribute('value'), obj );
             });
             
             /////
@@ -551,35 +561,35 @@
             
             
             // cycle
-            Object.keys(structure).some((group) => {
+            structure.forEach((group, group_key) => {
                 
                 // open group
                 if(!no_groups) {
                     const dis_class = (disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
                     
-                    const optgroup = select.querySelector('optgroup[label="'+ group +'"]'),
+                    const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]'),
                           img = (optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>' : '';
                     
                     code += 
-                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group +'</span>' +
+                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
                         '<ul class="lcslt-group-opts">';
                 }
                 
                 // group options
-                Object.keys( structure[group] ).some((opt) => { 
-                    const vals          = structure[group][opt],
+                structure.get(group_key).forEach((opt, opt_key) => {
+                    const vals          = structure.get(group_key).get(opt_key),
                           img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
                           sel_class     = (vals.selected) ? 'lcslt-selected' : '',
                           dis_class     = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '',
                           hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
-                          
+                    
                     // hide simple dropdown placeholder opt
-                    if(!multiple_class && select.querySelector('option[value="'+ opt +'"]').hasAttribute('data-lcslt-placeh')) {
+                    if(!multiple_class && select.querySelector('option[value="'+ opt_key +'"]').hasAttribute('data-lcslt-placeh')) {
                         return;        
                     }
 
                     code += 
-                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt +'">'+ 
+                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'">'+ 
                             '<span>'+ img + vals.name +'</span>'+
                         '</li>';
                 });
@@ -627,6 +637,16 @@
                     this.debounce('opts_search', 500, 'search_options'); 
                 });
             }
+            
+            
+            
+            // disable page scroll on element scroll
+            document.querySelector('.lc-select-dd-scroll').addEventListener('mouseenter', () => {
+                noscroll_window = [window.pageXOffset, window.pageYOffset];
+            });
+            document.querySelector('.lc-select-dd-scroll').addEventListener('mouseleave', () => {
+                noscroll_window = false;
+            });
         };
         
         
@@ -775,8 +795,7 @@
             }
         };
         
-        
-        
+
         
         
         
@@ -1013,7 +1032,19 @@
     const maybe_querySelectorAll = (selector) => {
              
         if(typeof(selector) != 'string') {
-            return (selector instanceof Element) ? [selector] : Object.values(selector);   
+            if(selector instanceof Element) { // JS or jQuery 
+                return [selector];
+            }
+            else {
+                let to_return = [];
+                
+                for(const obj of selector) {
+                    if(obj instanceof Element) {
+                        to_return.push(obj);    
+                    }
+                }
+                return to_return;
+            }
         }
         
         // clean problematic selectors
