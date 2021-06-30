@@ -1,7 +1,7 @@
 # Superlight vanilla javascript dropdowns by LCweb
 
 Need to **jump off of jQuery (or any other) dependency?** Other packages are too heavy to just tweak select fields?<br/>
-LC Select has been created focusing on these aspects: a pure javascript (ES6) plugin offering many features in **just 20KB (+ a 4KB theme)**. 
+LC Select has been created focusing on these aspects: a pure javascript (ES6) plugin offering many features in **just 21KB (+ a 4KB theme)**. 
 
 
 ![](plugin_preview.gif)
