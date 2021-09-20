@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.4
+ * Version: 1.1.5
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -281,6 +281,15 @@
                 placeh = options.labels[2];    
             }
             
+            // escape placeholder value for safe usage in attributes
+            placeh = placeh
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');  
+            
+            
             // additional classes
             if(typeof(options.addit_classes) == 'object') {
                 options.addit_classes.some((aclass) => { 
@@ -328,7 +337,7 @@
                 }
             }
             
-            
+
             // set content
             this.set_sel_content(trigger);
             
