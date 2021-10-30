@@ -378,14 +378,16 @@
             select.querySelectorAll('option').forEach(opt => {
                 
                 if(opt.selected) {
-                    const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : ''; 
-                        
+                    const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : '',
+                        icon = opt.hasAttribute('data-icon') ? '<i class="lcslt-icon ' + opt.getAttribute('data-icon').trim() + '"></i>' : '';
+
+                    const image = icon.length ? icon : img;
                     if(is_multiple) {
-                        code += '<div class="lcslt-multi-selected" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
+                        code += '<div class="lcslt-multi-selected" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ image + opt.innerHTML +'</span></div>';
                     } 
                     else {
-                        const single_placeh_mode = (options.pre_placeh_opt && opt.hasAttribute('data-lcslt-placeh')) ? 'class="lcslt-placeholder"' : ''; 
-                        code = '<span '+ single_placeh_mode +' title="'+ opt.innerHTML +'">'+ img + opt.innerHTML +'</span>';    
+                        const single_placeh_mode = (options.pre_placeh_opt && opt.hasAttribute('data-lcslt-placeh')) ? 'class="lcslt-placeholder"' : '';
+                        code = '<span '+ single_placeh_mode +' title="'+ opt.innerHTML +'">'+ image + opt.innerHTML +'</span>';
                     }
                     
                     sel_opts++;
@@ -501,6 +503,7 @@
                 group_name : [map] {
                     opt_val : {
                         img     : (string) ,
+                        icon     : (string) ,
                         name    : (string),
                         selected: (bool),
                         disabled: (bool)
@@ -530,6 +533,7 @@
                 
                 let obj     = {
                     img     : (opt.hasAttribute('data-image')) ? opt.getAttribute('data-image').trim() : '',
+                    icon    : (opt.hasAttribute('data-icon')) ? opt.getAttribute('data-icon').trim() : '',
                     name    : opt.innerHTML,
                     selected: opt.selected,
                     disabled: opt.disabled,
@@ -577,10 +581,16 @@
                     const dis_class = (disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
                     
                     const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]'),
-                          img = (optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>' : '';
+                        img = (optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image'))
+                            ? '<i class="lcslt-img" style="background-image: url(\'' + optgroup.getAttribute('data-image').trim() + '\')"></i>'
+                            : '',
+                        icon = (optgroup.hasAttribute('data-icon') && optgroup.getAttribute('data-icon'))
+                            ? '<i class="lcslt-icon ' + optgroup.getAttribute('data-icon').trim() + '"></i>' : '';
+
+                    const image = icon.length ? icon : img;
                     
                     code += 
-                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
+                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ image + group_key +'</span>' +
                         '<ul class="lcslt-group-opts">';
                 }
                 
@@ -588,6 +598,7 @@
                 structure.get(group_key).forEach((opt, opt_key) => {
                     const vals          = structure.get(group_key).get(opt_key),
                           img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
+                          icon          = (vals.icon) ? '<i class="lcslt-icon ' + vals.icon + '"></i>' : '',
                           sel_class     = (vals.selected) ? 'lcslt-selected' : '',
                           dis_class     = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '',
                           hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
@@ -597,9 +608,10 @@
                         return;        
                     }
 
+                    const image = icon.length ? icon : img;
                     code += 
                         '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'">'+ 
-                            '<span>'+ img + vals.name +'</span>'+
+                            '<span>'+ image + vals.name +'</span>'+
                         '</li>';
                 });
                 
