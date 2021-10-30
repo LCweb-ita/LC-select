@@ -177,9 +177,14 @@
 
 
 /* images */
-.lcslt-dark .lcslt-img {
+.lcslt-dark .lcslt-img, .lcslt-dark .lcslt-icon {
     display: inline-block;
     height: 17px;
     width: 20px;
     margin-right: 7px;
+}
+
+.lcslt-dark .lcslt-icon {
+    vertical-align: middle;
+    font-size: 17px;
 }

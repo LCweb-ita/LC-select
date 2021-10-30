@@ -17,7 +17,7 @@ LC Select has been created focusing on these aspects: a pure javascript (ES6) pl
 - (optional) searchbar with minimum fields threshold
 - (optional) maximum selectable options
 - complete keyboard events integration
-- option images support
+- option images, icons support
 - mobile ready
 - multilanguage ready
 
@@ -50,18 +50,20 @@ new lc_select('select');
 
 ## Specific HTML attributes
 
-There are two optional attributes you can use to take advantage of plugin functionalities:
+There are three optional attributes you can use to take advantage of plugin functionalities:
 
 - **data-placeholder:** to be used on the *select* HTML tag, sets field placeholder in case of no option selected<br/>(check also *pre_placeh_opt* option for simple selects)
 
 - **data-image:** to be used on *optgroup* or *option* HTML tags, sets option's image
+
+- **data-icon:** to be used on *optgroup* or *option* HTML tags, sets option's icon (has priority over data-image)
 
 ```
 <select name="simple" data-placeholder="Select something please ..">
     <optgroup label="Europe" data-image="demo-img/eu.svg">
         <option value="ita" data-image="demo-img/ita.svg">Italy</option>
         <option value="fra" data-image="demo-img/fra.png">France</option>
-        <option value="esp" data-image="demo-img/esp.png">Spain</option>
+        <option value="esp" data-icon="icon-flag-esp icon-lg icon-yellow">Spain</option>
     </optgroup>
 </select>
 ```
