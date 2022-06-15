@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.5
+ * Version: 1.1.6
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -947,6 +947,7 @@
 }
 #lc-select-dd ul {
 	margin: 0;
+    padding: 0;
 	list-style: none;
 }
 .lc-select-dd-scroll {
