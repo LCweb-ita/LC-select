@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.6
+ * Version: 1.1.7
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -440,7 +440,10 @@
             // close other opened dropdowns
             if(document.querySelector("#lc-select-dd")) {
                 document.querySelector("#lc-select-dd").remove();     
-                active_trigger.classList.remove('lcslt_dd-open');
+                
+                if(active_trigger) {
+                    active_trigger.classList.remove('lcslt_dd-open');
+                }
             }
             
             // close if already opened
@@ -562,7 +565,7 @@
             if(has_searchbar) {
                 code += 
                 '<ul><li class="lcslt-search-li">' +
-                    '<input type="text" name="lcslt-search" value="" placeholder="'+ options.labels[0] +' .." autocomplete="off" />' +
+                    '<input type="text" name="lcslt-search" value="" placeholder="'+ options.labels[0] +'" autocomplete="off" />' +
                 '</li></ul>';        
             }
             
@@ -799,7 +802,9 @@
                         document.querySelector('.lc-select-dd-scroll').insertAdjacentHTML('beforeend', '<li class="lcslt-no-results"><span>'+ options.labels[3] +'</span></li>');        
                     }
                 } else {
-                    no_results_li.remove();    
+                    if(no_results_li) {
+                        no_results_li.remove();
+                    }
                 }
             }
         };
