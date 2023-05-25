@@ -378,8 +378,11 @@
             select.querySelectorAll('option').forEach(opt => {
                 
                 if(opt.selected) {
-                    const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : ''; 
-                        
+                    let img = (opt.hasAttribute('data-image-class')) ? '<i class="'+ opt.getAttribute('data-image-class').trim() +'"></i>' : ''; 
+                    if(opt.hasAttribute('data-image')){
+						img = '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>'; 
+					}
+					
                     if(is_multiple) {
                         code += '<div class="lcslt-multi-selected" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
                     } 
@@ -504,6 +507,7 @@
                 group_name : [map] {
                     opt_val : {
                         img     : (string) ,
+                        imgClass: (string) ,
                         name    : (string),
                         selected: (bool),
                         disabled: (bool)
@@ -533,6 +537,7 @@
                 
                 let obj     = {
                     img     : (opt.hasAttribute('data-image')) ? opt.getAttribute('data-image').trim() : '',
+                    imgClass: (opt.hasAttribute('data-image-class')) ? opt.getAttribute('data-image-class').trim() : '',
                     name    : opt.innerHTML,
                     selected: opt.selected,
                     disabled: opt.disabled,
@@ -579,9 +584,12 @@
                 if(!no_groups) {
                     const dis_class = (disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
                     
-                    const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]'),
-                          img = (optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>' : '';
-                    
+                    const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]');
+					let img = (optgroup.hasAttribute('data-image-class')) ? '<i class="'+ optgroup.getAttribute('data-image-class').trim() +'"></i>' : ''; 
+                    if(optgroup.hasAttribute('data-image')){
+						img = '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>'; 
+					}
+					
                     code += 
                         '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
                         '<ul class="lcslt-group-opts">';
@@ -590,7 +598,7 @@
                 // group options
                 structure.get(group_key).forEach((opt, opt_key) => {
                     const vals          = structure.get(group_key).get(opt_key),
-                          img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
+                          img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : (vals.imgClass) ? '<i class="'+ vals.imgClass +'"></i>' : '',
                           sel_class     = (vals.selected) ? 'lcslt-selected' : '',
                           dis_class     = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '',
                           hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
