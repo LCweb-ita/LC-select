@@ -8,7 +8,7 @@
 
 
 (function() { 
-	"use strict";
+    "use strict";
     if(typeof(window.lc_select) != 'undefined') {return false;} // prevent multiple script inits  
     
     
@@ -380,9 +380,9 @@
                 if(opt.selected) {
                     let img = (opt.hasAttribute('data-image-class')) ? '<i class="'+ opt.getAttribute('data-image-class').trim() +'"></i>' : ''; 
                     if(opt.hasAttribute('data-image')){
-						img = '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>'; 
-					}
-					
+                        img = '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>'; 
+                    }
+                    
                     if(is_multiple) {
                         code += '<div class="lcslt-multi-selected" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
                     } 
@@ -585,11 +585,11 @@
                     const dis_class = (disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
                     
                     const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]');
-					let img = (optgroup.hasAttribute('data-image-class')) ? '<i class="'+ optgroup.getAttribute('data-image-class').trim() +'"></i>' : ''; 
+                    let img = (optgroup.hasAttribute('data-image-class')) ? '<i class="'+ optgroup.getAttribute('data-image-class').trim() +'"></i>' : ''; 
                     if(optgroup.hasAttribute('data-image')){
-						img = '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>'; 
-					}
-					
+                        img = '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>'; 
+                    }
+                    
                     code += 
                         '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
                         '<ul class="lcslt-group-opts">';
