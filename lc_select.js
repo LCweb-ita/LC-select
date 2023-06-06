@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.7
+ * Version: 1.1.8
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -298,8 +298,10 @@
             }
             
             // static width from select?
+            let dd_width;
             if(options.wrap_width != 'auto') {
-                div.style.width = (options.wrap_width == 'inherit') ? Math.round(el.getBoundingClientRect().width) + 'px' : options.wrap_width; 
+                dd_width = (options.wrap_width == 'inherit') ? Math.round(el.getBoundingClientRect().width) + 'px' : options.wrap_width;
+                div.style.width = dd_width;
             }
             
             
@@ -309,6 +311,22 @@
 
             el.parentNode.insertBefore(div, el);
             div.appendChild(el);
+            
+            
+            // inherit width - count lc-select paddings 
+            if(options.wrap_width == 'inherit') {
+                const $lcslt = div.querySelector('.lcslt'),
+                      lcslt_style = $lcslt.currentStyle || window.getComputedStyle($lcslt);
+
+                let addit_w = parseInt(lcslt_style.paddingRight, 10) + parseInt(lcslt_style.paddingLeft, 10); 
+                
+                // is there any image? count it
+                if(el.querySelector('option[data-image]')) {
+                    addit_w = addit_w + 20; 
+                }
+                
+                div.style.width = (parseInt(dd_width, 10) + addit_w) +'px';
+            }
             
             const trigger = div.querySelector('.lcslt');
             
