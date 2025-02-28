@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -494,6 +494,7 @@
         /* set dropdown position */
         this.set_dd_position = function() {
             const dd            = document.querySelector('#lc-select-dd'),
+                  select        = active_trigger.parentNode.querySelector('select'),
                   at_offset     = active_trigger.getBoundingClientRect(),
                   dd_w          = at_offset.width.toFixed(2),
                   at_h          = parseInt(active_trigger.clientHeight, 10) + parseInt(getComputedStyle(active_trigger)['borderTopWidth'], 10),
@@ -505,7 +506,8 @@
                 left = 0;
             }
 
-            dd.setAttribute('style', 'width:'+ dd_w +'px; top:'+ y_pos +'px; left: '+ left +'px;');          
+            dd.setAttribute('style', 'width:'+ dd_w +'px; top:'+ y_pos +'px; left: '+ left +'px;');
+            dd.setAttribute('data-fname', select.getAttribute('name'));
         };
         
         
@@ -758,7 +760,7 @@
                 this.set_dd_position();
             }
             // simple dropdown - close it after choice
-            else {
+            else if(active_trigger) {
                 active_trigger.click();
             }
         };
@@ -1024,7 +1026,7 @@
     align-items: center;
 }
 #lc-select-dd li span {
-    word-break: break-all;
+    word-break: break-word;
 }
 #lc-select-dd li span {
     display: inline-block;
