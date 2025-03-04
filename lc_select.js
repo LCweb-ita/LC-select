@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.9
+ * Version: 1.1.10
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -493,6 +493,10 @@
         
         /* set dropdown position */
         this.set_dd_position = function() {
+            if(!active_trigger) {
+                return;   
+            }
+            
             const dd            = document.querySelector('#lc-select-dd'),
                   select        = active_trigger.parentNode.querySelector('select'),
                   at_offset     = active_trigger.getBoundingClientRect(),
