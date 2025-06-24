@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.10
+ * Version: 1.1.11
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -273,7 +273,8 @@
                   fname_class   = 'lcslt-f-'+ el.getAttribute('name').replace(/\[\]/g, ''),
                   disabled_class= (el.disabled) ? 'lcslt-disabled' : '',
                   multi_class   = (el.multiple) ? 'lcslt-multiple' : '',
-                  tabindex      = (el.getAttribute('tabindex')) ? parseInt(el.getAttribute('tabindex'), 10) : '';
+                  tabindex      = (el.getAttribute('tabindex')) ? 'tabindex="'+ parseInt(el.getAttribute('tabindex'), 10) +'"' : '',
+                  uniqueId      = Math.random().toString(36).slice(2, 11);
             
             // be sure there's a placeholder for multiple
             let placeh = (el.hasAttribute('data-placeholder')) ? el.getAttribute('data-placeholder').trim() : ''; 
@@ -306,7 +307,9 @@
             
             
             div.classList.add("lcslt-wrap", fname_class);
-            div.innerHTML = '<input type="text" name="'+ fname_class +'-tit" tabindex="'+ tabindex +'" class="lcslt-tabindex-trick" />' +
+            
+            div.innerHTML = '<label for="'+ uniqueId +'"  class="lcslt-displaynone">'+ fname_class +'</label>' +
+                            '<input type="text" name="'+ fname_class +'-tit" '+ tabindex +' class="lcslt-tabindex-trick" id="'+ uniqueId +'" />' +
                             '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>';
 
             el.parentNode.insertBefore(div, el);
@@ -587,9 +590,11 @@
             // searchbar?
             const has_searchbar = (options.enable_search && select.querySelectorAll('option').length >= parseInt(options.min_for_search, 10)) ? true : false; 
             if(has_searchbar) {
+                const uniqueId = Math.random().toString(36).slice(2, 11);
                 code += 
                 '<ul><li class="lcslt-search-li">' +
-                    '<input type="text" name="lcslt-search" value="" placeholder="'+ options.labels[0] +'" autocomplete="off" />' +
+                    '<label for="'+ uniqueId +'" class="lcslt-displaynone">search</label>'
+                    '<input type="text" name="lcslt-search" value="" placeholder="'+ options.labels[0] +'" autocomplete="off" id="'+ uniqueId +'" />' +
                 '</li></ul>';        
             }
             
@@ -866,6 +871,9 @@
             
             document.head.insertAdjacentHTML('beforeend', 
 `<style>
+.lcslt-displaynone {
+    display: none;
+}
 .lcslt-wrap {
     position: relative;
     display: inline-block;
