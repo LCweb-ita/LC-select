@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.1.11
+ * Version: 1.2.0
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -308,9 +308,9 @@
             
             div.classList.add("lcslt-wrap", fname_class);
             
-            div.innerHTML = '<label for="'+ uniqueId +'"  class="lcslt-displaynone">'+ fname_class +'</label>' +
+            div.innerHTML = '<label for="'+ uniqueId +'" class="lcslt-displaynone">'+ fname_class +'</label>' +
                             '<input type="text" name="'+ fname_class +'-tit" '+ tabindex +' class="lcslt-tabindex-trick" id="'+ uniqueId +'" />' +
-                            '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'"></div>';
+                            '<div class="lcslt '+ fname_class +' '+ multi_class +' '+ disabled_class +'" data-placeh="'+ placeh +'" role="button" tabindex="0"></div>';
 
             el.parentNode.insertBefore(div, el);
             div.appendChild(el);
@@ -402,7 +402,7 @@
                     const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : ''; 
                         
                     if(is_multiple) {
-                        code += '<div class="lcslt-multi-selected" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
+                        code += '<div class="lcslt-multi-selected" role="button" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
                     } 
                     else {
                         const single_placeh_mode = (options.pre_placeh_opt && opt.hasAttribute('data-lcslt-placeh')) ? 'class="lcslt-placeholder"' : ''; 
@@ -434,7 +434,7 @@
                 code = '<span class="lcslt-placeholder">'+ trigger.getAttribute('data-placeh') +'</span>';    
             }
             else if(is_multiple && tot_opts > sel_opts && !select.disabled && !max_opts_reached) {
-                code += '<span class="lcslt-multi-callout" title="'+ options.labels[1] +'">+</span>';    
+                code += '<span class="lcslt-multi-callout" role="button" title="'+ options.labels[1] +'">+</span>';    
             }
             
             trigger.innerHTML = code;
@@ -593,7 +593,7 @@
                 const uniqueId = Math.random().toString(36).slice(2, 11);
                 code += 
                 '<ul><li class="lcslt-search-li">' +
-                    '<label for="'+ uniqueId +'" class="lcslt-displaynone">search</label>'
+                    '<label for="'+ uniqueId +'" class="lcslt-displaynone">search</label>' +
                     '<input type="text" name="lcslt-search" value="" placeholder="'+ options.labels[0] +'" autocomplete="off" id="'+ uniqueId +'" />' +
                 '</li></ul>';        
             }
@@ -630,7 +630,7 @@
                     }
 
                     code += 
-                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'">'+ 
+                        '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'" role="button" tabindex="0">'+ 
                             '<span>'+ img + vals.name +'</span>'+
                         '</li>';
                 });
@@ -674,9 +674,11 @@
                     setTimeout(() => document.querySelector('input[name=lcslt-search]').focus(), 50);
                 }
                 
-                document.querySelector('input[name=lcslt-search]').addEventListener("keyup", (e) => {
-                    this.debounce('opts_search', 500, 'search_options'); 
-                });
+                if(document.querySelector('input[name=lcslt-search]')) {
+                    document.querySelector('input[name=lcslt-search]').addEventListener("keyup", (e) => {
+                        this.debounce('opts_search', 500, 'search_options'); 
+                    });
+                }
             }
             
             
@@ -872,7 +874,7 @@
             document.head.insertAdjacentHTML('beforeend', 
 `<style>
 .lcslt-displaynone {
-    display: none;
+    display: none !important;
 }
 .lcslt-wrap {
     position: relative;
@@ -922,9 +924,15 @@
 	text-overflow: ellipsis;
 }
 .lcslt-multiple {
-	padding: 5px 5px 0 5px;
+	padding: 5px;
 	height: auto;
 	line-height: 0;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap: 5px;
+	align-items: center;
+	justify-content: flex-start;
 }
 .lcslt span:not(.lcslt-placeholder):not(.lcslt-multi-callout) {
 	line-height: 1.1em;
