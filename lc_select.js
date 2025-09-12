@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.2.0
+ * Version: 1.3.0
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -206,6 +206,11 @@
                 if(el.parentNode.classList.length && el.parentNode.classList.contains('lcslt-wrap')) {
                     return;    
                 }
+                
+                // do not initialize elements without name
+                /*if(!el.getAttribute('name')) {
+                    return;   
+                }*/
 
                 $this.wrap_element(el);
 
@@ -538,12 +543,13 @@
                 }
                 */
             no_groups       = false,
-            disabled_groups = []; 
+            disabled_groups = [],
+            opts_order      = [];
             
             // retrieve groups
             if(!select.querySelectorAll('optgroup').length) {
                 no_groups = true;
-                structure.set('%%lcslt%%', new Map());
+                structure.set('%%ungrouped%%', new Map());
             }
             else {
                 select.querySelectorAll('optgroup').forEach(group => {
@@ -555,24 +561,56 @@
                 });
             }
             
-            // retrieve options and associate them 
-            select.querySelectorAll('option').forEach(opt => {
-                
-                let obj     = {
-                    img     : (opt.hasAttribute('data-image')) ? opt.getAttribute('data-image').trim() : '',
-                    name    : opt.innerHTML,
-                    selected: opt.selected,
-                    disabled: opt.disabled,
-                };
-                
-                const group = (no_groups) ? '%%lcslt%%' : opt.parentNode.getAttribute('label');
-                
-                // skip options withoput a group, if there are groups
-                if(!no_groups && !group) {
-                    return;    
+            // retrieve options and preserve DOM order in opts_order
+            if(!structure.has('%%ungrouped%%')) {
+              structure.set('%%ungrouped%%', new Map());
+            }
+
+            // cycle through options and populate
+            [...select.children].forEach(child => {
+                if(child.tagName === 'OPTION') {
+                    const val = child.getAttribute('value');
+
+                    structure.get('%%ungrouped%%').set(val, {
+                        img: (child.hasAttribute('data-image')) ? child.getAttribute('data-image').trim() : '',
+                        name: child.innerHTML,
+                        selected: child.selected,
+                        disabled: child.disabled
+                    });
+
+                    // register as ungrouped in this case
+                    opts_order.push({
+                        type : 'option',
+                        group: '%%ungrouped%%',
+                        value: val
+                    });
                 }
-                
-                structure.get( group ).set( opt.getAttribute('value'), obj );
+
+                if(child.tagName === 'OPTGROUP') {
+                    const label = child.getAttribute('label');
+                    
+                    if(!structure.has(label)) {
+                        structure.set(label, new Map());
+                    }
+                    if(child.disabled) {
+                        disabled_groups.push(label);
+                    }
+
+                    // respect the order
+                    opts_order.push({
+                        type : 'group',
+                        label: label
+                    });
+                    
+                    child.querySelectorAll('option').forEach(opt => {
+                        structure.get(label).set(opt.getAttribute('value'), {
+                            img: (opt.hasAttribute('data-image')) ? opt.getAttribute('data-image').trim() : '',
+                            name: opt.innerHTML,
+                            selected: opt.selected,
+                            disabled: opt.disabled
+                        });
+                    });
+                }
             });
             
             /////
@@ -602,28 +640,18 @@
             
             
             // cycle
-            structure.forEach((group, group_key) => {
-                
-                // open group
-                if(!no_groups) {
-                    const dis_class = (disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '';
-                    
-                    const optgroup = select.querySelector('optgroup[label="'+ group_key +'"]'),
-                          img = (optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>' : '';
-                    
-                    code += 
-                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
-                        '<ul class="lcslt-group-opts">';
-                }
-                
-                // group options
-                structure.get(group_key).forEach((opt, opt_key) => {
-                    const vals          = structure.get(group_key).get(opt_key),
+            opts_order.forEach((entry) => {
+
+                // single ungrouped option
+                if(entry.type === 'option') {
+                    const group_key     = entry.group,
+                          opt_key       = entry.value,
+                          vals          = structure.get(group_key).get(opt_key),
                           img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
                           sel_class     = (vals.selected) ? 'lcslt-selected' : '',
-                          dis_class     = (vals.disabled || disabled_groups.indexOf(group) !== -1) ? 'lcslt-disabled': '',
+                          dis_class     = (vals.disabled || disabled_groups.indexOf(group_key) !== -1) ? 'lcslt-disabled': '',
                           hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
-                    
+
                     // hide simple dropdown placeholder opt
                     if(!multiple_class && select.querySelector('option[value="'+ opt_key +'"]').hasAttribute('data-lcslt-placeh')) {
                         return;        
@@ -633,11 +661,39 @@
                         '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'" role="button" tabindex="0">'+ 
                             '<span>'+ img + vals.name +'</span>'+
                         '</li>';
-                });
-                
-                // close group
-                if(!no_groups) {
-                    code += '</ul></li>';           
+                }
+
+                // whole optgroup block
+                if(entry.type === 'group') {
+                    const group_key = entry.label,
+                          dis_class = (disabled_groups.indexOf(group_key) !== -1) ? 'lcslt-disabled': '',
+                          optgroup = select.querySelector('optgroup[label="'+ group_key +'"]'),
+                          img = (optgroup && optgroup.hasAttribute('data-image') && optgroup.getAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ optgroup.getAttribute('data-image').trim() +'\')"></i>' : '';
+                    
+                    code += 
+                        '<li class="lcslt-group '+ dis_class +'"><span class="lcslt-group-name">'+ img + group_key +'</span>' +
+                        '<ul class="lcslt-group-opts">';
+
+                    // group options
+                    structure.get(group_key).forEach((opt, opt_key) => {
+                        const vals          = structure.get(group_key).get(opt_key),
+                              img           = (vals.img) ? '<i class="lcslt-img" style="background-image: url(\''+ vals.img +'\')"></i>' : '',
+                              sel_class     = (vals.selected) ? 'lcslt-selected' : '',
+                              dis_class     = (vals.disabled || disabled_groups.indexOf(group_key) !== -1) ? 'lcslt-disabled': '',
+                              hlight_class  = (!highligh_set && sel_class) ? 'lcslt-dd-opt-hlight' : '';
+                        
+                        // hide simple dropdown placeholder opt
+                        if(!multiple_class && select.querySelector('option[value="'+ opt_key +'"]').hasAttribute('data-lcslt-placeh')) {
+                            return;        
+                        }
+
+                        code += 
+                            '<li class="lcslt-dd-opt '+ sel_class +' '+ dis_class +' '+ hlight_class +'" data-val="'+ opt_key +'" role="button" tabindex="0">'+ 
+                                '<span>'+ img + vals.name +'</span>'+
+                            '</li>';
+                    });
+
+                    code += '</ul></li>';
                 }         
             });
             document.body.insertAdjacentHTML('beforeend', code +'</ul></div>');
