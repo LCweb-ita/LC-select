@@ -1,6 +1,6 @@
 /**
  * lc_select.js - Superlight Javascript dropdowns
- * Version: 1.3.0
+ * Version: 1.4.0
  * Author: Luca Montanari (LCweb)
  * Website: https://lcweb.it
  * Licensed under the MIT license
@@ -407,7 +407,9 @@
                     const img = (opt.hasAttribute('data-image')) ? '<i class="lcslt-img" style="background-image: url(\''+ opt.getAttribute('data-image').trim() +'\')"></i>' : ''; 
                         
                     if(is_multiple) {
-                        code += '<div class="lcslt-multi-selected" role="button" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
+                        const disabled_class = (opt.disabled) ? 'lcslt-multi-disabled' : '';
+                              
+                        code += '<div class="lcslt-multi-selected '+ disabled_class +'" role="button" data-val="'+ opt.getAttribute('value') +'" title="'+ opt.innerHTML +'"><span>'+ img + opt.innerHTML +'</span></div>';
                     } 
                     else {
                         const single_placeh_mode = (options.pre_placeh_opt && opt.hasAttribute('data-lcslt-placeh')) ? 'class="lcslt-placeholder"' : ''; 
@@ -447,7 +449,7 @@
             
             // sel opt click listener - deselect
             if(is_multiple) {
-                trigger.querySelectorAll('.lcslt-multi-selected').forEach(sel_opt => { 
+                trigger.querySelectorAll('.lcslt-multi-selected:not(.lcslt-multi-disabled)').forEach(sel_opt => { 
                     sel_opt.addEventListener("click", (e) => {
                         
                         if( !recursive_parent(e.target, '.lcslt').classList.contains('lcslt-disabled') ) {
@@ -978,6 +980,9 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+.lcslt-multi-disabled {
+    cursor: not-allowed !important;
 }
 .lcslt-multiple {
 	padding: 5px;

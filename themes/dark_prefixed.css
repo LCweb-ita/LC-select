@@ -33,7 +33,7 @@
     padding: 2px 0;
 }
 .lcslt-dark .lcslt.lcslt-multiple > span:not(.lcslt-multi-callout) {
-    padding: 3px 0 6px;
+    padding: 3px 0;
 }
 .lcslt-dark.lcslt:not(.lcslt-multiple) > span:not(.lcslt-placeholder) {
     font-size: 90%;
@@ -41,25 +41,6 @@
 .lcslt-dark .lcslt > span:not(.lcslt-placeholder):not(.lcslt-multi-callout),
 .lcslt-dark#lc-select-dd li {
     color: #8f8f8f;
-}
-
-
-/* disabled status */
-.lcslt-dark .lcslt.lcslt-disabled {
-    background: #f4f4f4;
-}
-.lcslt-dark .lcslt.lcslt-disabled:not(.lcslt-multiple):after {
-	border-top-color: #aaa !important;
-}
-.lcslt-dark .lcslt.lcslt-disabled:not(.lcslt-multiple) > span {
-    color: #848484;
-}
-.lcslt-dark .lcslt.lcslt-disabled .lcslt-multi-selected {
-    color: #666;
-    padding-left: 9px;
-}
-.lcslt-dark .lcslt.lcslt-disabled .lcslt-multi-selected:before {
-    display: none;
 }
 
 
@@ -73,7 +54,6 @@
     background: #555;
     color: #dfdfdf;
     border-radius: 50px;
-    margin: 0 5px 5px 0;
     transition: all .3s ease;
 }
 .lcslt-dark .lcslt-multi-callout {
@@ -82,7 +62,7 @@
 	border-radius: 50%;
 	font-size: 1rem;
 }
-.lcslt-dark .lcslt:not(.lcslt-disabled) .lcslt-multi-selected:hover,
+.lcslt-dark .lcslt:not(.lcslt-disabled) .lcslt-multi-selected:not(.lcslt-multi-disabled):hover,
 .lcslt-dark .lcslt:not(.lcslt-disabled) .lcslt-multi-callout:hover {
     background: #414141;
     color: #e2e2e2; 
@@ -93,6 +73,27 @@
 .lcslt-dark .lcslt-placeholder {
 	color: #797979;
 	transform: scale(0.9) translate3d(-5%, -5%, 0);
+}
+
+
+/* disabled status */
+.lcslt-dark .lcslt.lcslt-disabled {
+    background: #f4f4f4;
+}
+.lcslt-dark .lcslt.lcslt-disabled:not(.lcslt-multiple):after {
+	border-top-color: #aaa !important;
+}
+.lcslt-dark .lcslt.lcslt-disabled:not(.lcslt-multiple) > span {
+    color: #848484;
+}
+.lcslt-dark .lcslt.lcslt-disabled .lcslt-multi-selected,
+.lcslt-dark .lcslt-multi-disabled {
+    color: #b0b0b0;
+    padding-left: 9px;
+}
+.lcslt-dark .lcslt.lcslt-disabled .lcslt-multi-selected:before,
+.lcslt-dark .lcslt-multi-disabled:before {
+    display: none;
 }
 
 

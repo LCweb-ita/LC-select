@@ -78,7 +78,7 @@
         
             <form>
                 <label>Simple (with images, search and prepended placeholder option)</label>
-                <select name="simple" data-placeholder="Select something please ..">
+                <select name="simple" data-placeholder="Select something please .." autocomplete="off">
                     <optgroup label="Europe" data-image="demo-img/eu.svg">
                         <option value="ita" data-image="demo-img/ita.svg">Italy</option>
                         <option value="fra" data-image="demo-img/fra.png" disabled>France</option>
@@ -92,8 +92,8 @@
                 </select>
                 
                 <label>Multiple (max 2 selectable options)</label>
-                <select name="multiple" data-placeholder="What a nice placeholder" multiple>
-                    <option value="lorem">Lorem</option>
+                <select name="multiple" data-placeholder="What a nice placeholder" autocomplete="off" multiple>
+                    <option value="lorem" selected>Lorem</option>
                     <option value="ipsum" selected>Ipsum</option>
                     <option value="dolor">Dolor</option>
                 </select>

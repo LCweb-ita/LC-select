@@ -33,7 +33,7 @@
     padding: 2px 0;
 }
 .lcslt-light .lcslt.lcslt-multiple > span:not(.lcslt-multi-callout) {
-    padding: 3px 0 6px;
+    padding: 3px 0;
 }
 .lcslt-light.lcslt:not(.lcslt-multiple) > span:not(.lcslt-placeholder) {
     font-size: 90%;
@@ -41,25 +41,6 @@
 .lcslt-light .lcslt > span:not(.lcslt-placeholder):not(.lcslt-multi-callout),
 .lcslt-light#lc-select-dd li {
     color: #484848;
-}
-
-
-/* disabled status */
-.lcslt-light .lcslt.lcslt-disabled {
-    background: #f4f4f4;
-}
-.lcslt-light .lcslt.lcslt-disabled:not(.lcslt-multiple):after {
-	border-top-color: #aaa !important;
-}
-.lcslt-light .lcslt.lcslt-disabled:not(.lcslt-multiple) > span {
-    color: #848484;
-}
-.lcslt-light .lcslt.lcslt-disabled .lcslt-multi-selected {
-    color: #666;
-    padding-left: 9px;
-}
-.lcslt-light .lcslt.lcslt-disabled .lcslt-multi-selected:before {
-    display: none;
 }
 
 
@@ -73,7 +54,6 @@
     background: #e5e5e5;
     color: #494949;
     border-radius: 50px;
-    margin: 0 5px 5px 0;
     transition: all .3s ease;
 }
 .lcslt-light .lcslt-multi-callout {
@@ -82,7 +62,7 @@
 	border-radius: 50%;
 	font-size: 1rem;
 }
-.lcslt-light .lcslt:not(.lcslt-disabled) .lcslt-multi-selected:hover,
+.lcslt-light .lcslt:not(.lcslt-disabled) .lcslt-multi-selected:not(.lcslt-multi-disabled):hover,
 .lcslt-light .lcslt:not(.lcslt-disabled) .lcslt-multi-callout:hover {
     background: #ddd;
     color: #3f3f3f; 
@@ -93,6 +73,27 @@
 .lcslt-light .lcslt-placeholder {
 	color: #888;
 	transform: scale(0.9) translate3d(-5%, -5%, 0);
+}
+
+
+/* disabled status */
+.lcslt-light .lcslt.lcslt-disabled {
+    background: #f4f4f4;
+}
+.lcslt-light .lcslt.lcslt-disabled:not(.lcslt-multiple):after {
+	border-top-color: #aaa !important;
+}
+.lcslt-light .lcslt.lcslt-disabled:not(.lcslt-multiple) > span {
+    color: #848484;
+}
+.lcslt-light .lcslt.lcslt-disabled .lcslt-multi-selected.
+.lcslt-light .lcslt-multi-disabled {
+    color: #777;
+    padding-left: 9px;
+}
+.lcslt-light .lcslt.lcslt-disabled .lcslt-multi-selected:before,
+.lcslt-light .lcslt-multi-disabled:before {
+    display: none;
 }
 
 
